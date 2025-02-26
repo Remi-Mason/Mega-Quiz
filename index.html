@@ -183,9 +183,19 @@
       #question-text { font-size: 18px; }
       #question-counter { font-size: 16px; }
     }
+	  @keyframes startBtnAnim {
+  0%   { transform: scale(1); }
+  50%  { transform: scale(1.2); }
+  100% { transform: scale(1); }
+}
+
+.animate {
+  animation: startBtnAnim 2s;
+}
   </style>
 </head>
 <body>
+	<audio id="start-sound" src="audio/destiny.mp3"></audio>
   <!-- Overlay Index -->
   <div id="overlay-index" class="overlay" onclick="closeOverlay()">
     <div class="overlay-content" onclick="event.stopPropagation()">
@@ -4097,16 +4107,32 @@
     }
     
     /* Démarrage du Quiz */
-    function startQuiz() {
-      // Mélanger l'ordre des questions à chaque lancement
-      shuffleArray(questions);
-      currentQuestion = 0;
-      score = 0;
-      document.getElementById("home-page").classList.remove("active");
-      document.getElementById("final-page").classList.remove("active");
-      document.getElementById("quiz-page").classList.add("active");
-      displayQuestion();
-    }
+   function startQuiz() {
+  // Récupérer l'élément audio et le bouton Start
+  const startSound = document.getElementById("start-sound");
+  const startBtn = document.getElementById("start-btn");
+
+  // Jouer le son MP3
+  startSound.play();
+
+  // Ajouter la classe d'animation au bouton
+  startBtn.classList.add("animate");
+
+  // Après 2 secondes (fin de l'animation), démarrer le quiz
+  setTimeout(() => {
+    // Retirer l'animation
+    startBtn.classList.remove("animate");
+
+    // Mélanger l'ordre des questions et démarrer le quiz
+    shuffleArray(questions);
+    currentQuestion = 0;
+    score = 0;
+    document.getElementById("home-page").classList.remove("active");
+    document.getElementById("final-page").classList.remove("active");
+    document.getElementById("quiz-page").classList.add("active");
+    displayQuestion();
+  }, 2000);
+}
     
     /* Affichage de la question avec options mélangées */
     function displayQuestion() {
